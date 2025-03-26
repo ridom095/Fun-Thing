@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun things | Home</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        body {
+            background: url('bg.gif') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            color: white;
+            font-family: system-ui;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .choose {
+            margin-top: 0px;
+            margin-bottom: 200px;
+            font-size: 40px;
+        }
+        .choose:hover {
+            transition: 0.5s;
+            font-size: 45px;
+            display: inline-block;
+            text-shadow: 0px 0px 30px #fff;
+        }
+        @keyframes blast {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                color: white;
+            }
+            50% {
+                transform: scale(2);
+                color: red;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        .blast {
+            animation: blast 0.5s ease-out forwards;
+        }
+        .hidden {
+            visibility: hidden;
+        }
+        .button-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 0px;
+        }
+        .gbu {
+            margin-left: 10px;
+            background: #923cfb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0px 5px 30px 5px rgba(40, 40, 200, 1);
+        }
+        .gbu:hover {
+            background: #6f2ebe;
+            box-shadow: 0px 15px 30px 5px rgba(40, 40, 200, 1);
+        }
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <h1 id="chooseText" class="choose" onclick="blastText(this)" style="transition: 0.5s;">Choose your game</h1>
+    <div class="button-container">
+        <button class="gbu" onclick="blastText(this, 'gone.html')">Rock, Paper or Scissors</button>
+        <button class="gbu" onclick="blastText(this, 'gtwo.html')">Number Guessing Game</button>
+    </div>
+    <p class="footer">Made by Ridom Ahammed</p>
+    <script>
+        function blastText(element, link) {
+            element.classList.add('blast');
+
+            setTimeout(() => {
+                element.classList.remove('blast');
+            }, 500);
+            if (link) {
+                setTimeout(() => {
+                    window.location.href = link;
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>

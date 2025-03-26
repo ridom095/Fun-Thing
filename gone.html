@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fun Thing | Rock, Paper or Scissors</title>
+    <style>
+        body {
+            background: url('gonebg.gif') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            color: white;
+            font-family: system-ui;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            margin: 20px 0;
+            font-size: 40px;
+        }
+        .header:hover {
+            transition: 0.5s;
+            font-size: 45px;
+            display: inline-block;
+            text-shadow: 0px 0px 30px #fff;
+        }
+        .button-container {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            background: #dd153c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 5px 30px 5px rgb(200 40 89);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-width: 120px;
+        }
+        .btn:hover {
+            background: #a51531;
+            box-shadow: 0px 15px 30px 5px rgb(200 40 89);
+        }
+        .btn.clicked {
+            background: #750b24;
+            box-shadow: 0px 5px 30px 5px rgb(100 20 50);
+        }
+        @keyframes popup {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .popup {
+            animation: popup 0.5s ease-out;
+        }
+        @keyframes blast {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                color: white;
+            }
+            50% {
+                transform: scale(1.5);
+                color: red;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        .blast {
+            animation: blast 0.5s ease-out forwards;
+        }
+        #result {
+            display: none;
+            font-size: 30px;
+            margin-top: 20px;
+            color: white;
+            text-shadow: 0px 0px 20px #fff;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #countdown {
+            font-size: 40px;
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+        }
+        #homeButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 5px 30px 5px rgba(0, 123, 255, 0.7);
+        }
+        #homeButton:hover {
+            background: #0056b3;
+            box-shadow: 0px 15px 30px 5px rgba(0, 123, 255, 0.7);
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+		@media (max-width: 700px) {
+		    .header {
+		        font-size: 30px;
+		        text-align: right;
+		    }
+
+		    .header:hover {
+		        font-size: 35px;
+		    }
+
+		    .button-container {
+		        position: static;
+		        display: flex;
+		        flex-direction: column;
+		        gap: 15px;
+		        margin: 0 auto;
+		        padding-top: 20px;
+		        width: 100%;
+		        justify-content: center;
+		        align-items: center;
+		    }
+
+		    .btn {
+		        font-size: 18px;
+		        display: flex;
+		        justify-content: center;
+		        align-items: center;
+		        margin-left: 130px;
+		    }
+
+		    #result {
+		        font-size: 24px;
+		        bottom: 50px;
+		    }
+
+		    #countdown {
+		        font-size: 30px;
+		        bottom: 75px;
+		    }
+
+		    #homeButton {
+		        font-size: 18px;
+		        top: 10px;
+		        right: 10px;
+		        padding: 8px 12px;
+		    }
+
+		    .footer {
+		        font-size: 14px;
+		    }
+		}
+    </style>
+</head>
+<body>
+    <h1 id="chooseText" class="header" onclick="blastText(this)" style="transition: 0.5s; display: inline;">Rock, Paper or Scissors</h1><br><br><br><br>
+    <h1 id="playertext">You:</h1>
+    <h1 id="computertext">Computer:</h1>
+    <h1 id="resuletext">Result:</h1>
+    <div class="button-container">
+        <button class="btn" onclick="handleChoice('Rock', this)">Rock</button>
+        <button class="btn" onclick="handleChoice('Paper', this)">Paper</button>
+        <button class="btn" onclick="handleChoice('Scissors', this)">Scissors</button>
+    </div>
+    <div id="result" class="popup"></div>
+    <div id="countdown"></div>
+
+    <button id="homeButton" onclick="goHome()">Home</button>
+
+    <p class="footer">Made by Ridom Ahammed</p>
+
+    <script>
+        function blastText(element) {
+            element.classList.add('blast');
+
+            setTimeout(() => {
+                element.classList.remove('blast');
+            }, 500);
+        }
+
+        var playerChoice = "";
+        var countdownInterval;
+
+        function handleChoice(choice, button) {
+            playerChoice = choice;
+            button.classList.add('clicked');
+            button.classList.add('blast');
+
+            setTimeout(() => {
+                button.classList.remove('clicked');
+                button.classList.remove('blast');
+            }, 500);
+            resultDiv.style.display = "none";
+            countdownDiv.style.display = "block";
+            clearInterval(countdownInterval);
+            startCountdown();
+        }
+
+        var playerText = document.querySelector("#playertext");
+        var computerText = document.querySelector("#computertext");
+        var resultText = document.querySelector("#resuletext");
+        var resultDiv = document.querySelector("#result");
+        var countdownDiv = document.querySelector("#countdown");
+        var draw = "Draw!";
+        var playerw = "You Win!";
+        var computerw = "Computer Wins!";
+
+        function comchoice() {
+            var choices = ["Rock", "Paper", "Scissors"];
+            var ch = Math.floor(Math.random() * choices.length);
+            return choices[ch];
+        }
+
+        function funwin(pchoice, cchoice) {
+            if (pchoice === cchoice) {
+                return draw;
+            }
+            else if (
+                (pchoice == "Rock" && cchoice == "Scissors") ||
+                (pchoice == "Paper" && cchoice == "Rock") ||
+                (pchoice == "Scissors" && cchoice == "Paper")
+            ) {
+                return playerw;
+            }
+            else {
+                return computerw;
+            }
+        }
+
+        function playGame(pchoice) {
+            var cchoice = comchoice();
+            var result = funwin(pchoice, cchoice);
+
+            playerText.textContent = "You: " + pchoice;
+            computerText.textContent = "Computer: " + cchoice;
+            resultText.textContent = "Result: " + result;
+
+            return result;
+        }
+
+        function displayResult(result) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = result;
+            resultDiv.classList.add("popup");
+        }
+
+        function startCountdown() {
+            var count = 3;
+            countdownDiv.textContent = count;
+
+            countdownInterval = setInterval(function () {
+                count--;
+                countdownDiv.textContent = count;
+
+                if (count === 0) {
+                    clearInterval(countdownInterval);
+                    countdownDiv.style.display = "none";
+                    var result = playGame(playerChoice);
+                    displayResult(result);
+                }
+            }, 1000);
+        }
+
+        function goHome() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
